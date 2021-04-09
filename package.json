@@ -1,0 +1,19 @@
+{
+  "name": "babylonjs-learning",
+  "version": "1.0.0",
+  "description": "A project to follow the BabylonJS (awesome) doc tutos",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "private": true,
+  "keywords": [
+    "WebGL",
+    "BabylonJS",
+    "WebXR"
+  ],
+  "author": "Sylvain Nieuwlandt",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
