@@ -8,7 +8,8 @@
 			"skipFiles": [
 				"<node_internals>/**"
 			],
-			"program": "${workspaceFolder}/main.js"
+			"preLaunchTask": "compile-demo",
+			"program": "${workspaceFolder}/scripts/serve.js"
 		}
 	]
 }

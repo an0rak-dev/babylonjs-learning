@@ -10,6 +10,7 @@ you've made sure you have it, open a terminal in this folder and then do :
 
 ```sh
 npm install # required only the first time
+npm run compile
 npm start
 ```
 
