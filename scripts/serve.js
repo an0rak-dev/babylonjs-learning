@@ -5,9 +5,10 @@ const app = express();
 const PORT = 8080;
 
 app.use(express.static("assets"));
+app.use(express.static("dist"));
 
 app.get("/", (req, res) => {
-	const indexPath = path.join(__dirname, "index.html");
+	const indexPath = path.join(__dirname, "..", "index.html");
 	res.sendFile(indexPath);
 });
 
