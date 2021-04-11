@@ -16,20 +16,26 @@
 import { AbstractScene } from "../scene";
 
 /**
- * SimpleCube is the most basic scene which will renders a cube with no particular
- * texture on it in.
+ * Houses is a simple scene which will renders two textured houses in a green
+ * square plane.
  *
  * @author Sylvain Nieuwlandt
  */
-export class SimpleCube extends AbstractScene {
-	constructor(engine : BABYLON.Engine, canvas : HTMLCanvasElement) {
+export class Houses extends AbstractScene {
+	constructor(engine: BABYLON.Engine, canvas: HTMLCanvasElement) {
 		super(engine, canvas);
 	}
 
-	protected init() : void {
-		const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, new BABYLON.Vector3(0, 0, 0), this.scene);
+	protected init(): void {
+		const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, new BABYLON.Vector3(0, 2, -3), this.scene);
 		camera.attachControl(this.canvas, true);
 		const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), this.scene);
-		const box = BABYLON.MeshBuilder.CreateBox("box", {}, this.scene);
+
+		BABYLON.SceneLoader.ImportMeshAsync("", "https://assets.babylonjs.com/meshes/", "both_houses_scene.babylon").then((result) => {
+			const house1 = result.meshes[1];
+			house1.position.y = 0;
+			const house2 = result.meshes[2];
+			house2.position.y = 0;
+		});
 	}
 }

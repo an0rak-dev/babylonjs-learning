@@ -1,0 +1,22 @@
+name: Pull Request
+
+on:
+  push:
+    branches-ignore:
+      - "main"
+
+jobs:
+  compile:
+    name: Compile the bundle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Install dependencies
+        run: npm clean-install
+      - name: Compile
+        run: npm run compile
