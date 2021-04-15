@@ -35,5 +35,10 @@ export class Village extends AbstractScene {
 		const box = BABYLON.MeshBuilder.CreateBox("box", {}, this.scene);
 		const ground = BABYLON.MeshBuilder.CreateGround("ground", { width : this.worldWidth, height: this.worldHeight }, this.scene);
 		box.position.y = 0.5;
+
+		const crowd = new BABYLON.Sound("crowd", "/crowd.mp3", this.scene,
+		 	null,
+			{autoplay: true, loop: true});
+
 	}
 }
