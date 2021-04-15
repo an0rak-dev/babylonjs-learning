@@ -15,6 +15,7 @@
 */
 
 import { SimpleCube } from "./demo/cube.scene";
+import { Village } from "./demo/village.scene";
 import { Houses } from "./demo/house.scene";
 import { AbstractScene } from "./scene";
 
@@ -31,10 +32,13 @@ const ANTI_ALIASING_ENABLED = true;
 /**
  * The name of the scene to render.
  *
- * Accepted values are "cube" and "house". If the value is different, an error will
- * be written in the console and the rendering will stop.
+ * Accepted values are :
+ *   * "cube"
+ *   * "house"
+ *   * "village"
+ * If the value is different, an error will be written in the console and the rendering will stop.
  */
-const CURRENT_SCENE = "house";
+const CURRENT_SCENE = "village";
 
 /**
  * Entrypoint of the application.
@@ -89,6 +93,8 @@ function getScene(engine : BABYLON.Engine, canvas : HTMLCanvasElement) : Abstrac
 			return new SimpleCube(engine, canvas);
 		case "house":
 			return new Houses(engine, canvas);
+		case "village":
+			return new Village(engine, canvas);
 		default:
 			console.error(`No scene found with code ${CURRENT_SCENE}`);
 			return undefined;

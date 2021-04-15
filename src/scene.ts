@@ -28,7 +28,9 @@ export abstract class AbstractScene {
 	/**
 	 * The canvas element which will host all the scene.
 	 */
-	protected readonly canvas : HTMLCanvasElement;
+	private readonly canvas : HTMLCanvasElement;
+
+	private initiliazed: boolean;
 
 	/**
 	 * Creates a new Scene based on the given engine instance and canvas.
@@ -39,21 +41,40 @@ export abstract class AbstractScene {
 	constructor(engine : BABYLON.Engine, canvas : HTMLCanvasElement) {
 		this.scene = new BABYLON.Scene(engine);
 		this.canvas = canvas;
-		this.init();
+		this.initiliazed = false;
 	}
 
 	/**
 	 * Renders the actual scene based on its configuration.
 	 */
 	public render() : void {
+		if (!this.initiliazed) {
+			this.init();
+			this.initiliazed = true;
+		}
 		this.scene.render();
 	}
 
 	/**
 	 * Initialize the current scene.
 	 *
-	 * Implementations of this method should use the protected attributes 'scene'
-	 * and 'canvas'.
+	 * Implementations of this method should use the protected attributes 'scene'.
 	 */
 	protected abstract init() : void;
+
+	/**
+	 * Add a camera and a light to the current scene.
+	 *
+	 * Add a new light pointing upwards (pos Y), and a camera aiming in the given direction.
+	 *
+	 * @param xTarget the aiming vector of the camera (X-axis coord)
+	 * @param yTarget the aiming vector of the camera (Y-axis coord)
+	 * @param zTarget the aiming vector of the camera (Z-axis coord)
+	 */
+	protected addCamera(xTarget : number, yTarget : number, zTarget : number) : void {
+		const target = new BABYLON.Vector3(xTarget, yTarget, zTarget);
+		const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, target, this.scene);
+		camera.attachControl(this.canvas, true);
+		new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), this.scene);
+	}
 }
