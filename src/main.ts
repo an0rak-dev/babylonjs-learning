@@ -15,7 +15,7 @@
 */
 
 import { SimpleCube } from "./demo/cube.scene";
-import { Village } from "./demo/ground.scene";
+import { Village } from "./demo/village.scene";
 import { Houses } from "./demo/house.scene";
 import { AbstractScene } from "./scene";
 

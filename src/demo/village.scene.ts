@@ -16,18 +16,24 @@
 import { AbstractScene } from "../scene";
 
 /**
- * SimpleCube is the most basic scene which will renders a cube with no particular
- * texture on it in.
+ * Village will display several textured meshes, some animations and sounds too.
  *
  * @author Sylvain Nieuwlandt
  */
-export class SimpleCube extends AbstractScene {
-	constructor(engine : BABYLON.Engine, canvas : HTMLCanvasElement) {
+export class Village extends AbstractScene {
+	private readonly worldWidth : number;
+	private readonly worldHeight : number;
+
+	constructor(engine: BABYLON.Engine, canvas: HTMLCanvasElement) {
 		super(engine, canvas);
+		this.worldWidth = 10;
+		this.worldHeight = 10;
 	}
 
-	protected init() : void {
-		this.addCamera(0, 0, 0);
+	protected init(): void {
+		this.addCamera(0, 1, -2);
 		const box = BABYLON.MeshBuilder.CreateBox("box", {}, this.scene);
+		const ground = BABYLON.MeshBuilder.CreateGround("ground", { width : this.worldWidth, height: this.worldHeight }, this.scene);
+		box.position.y = 0.5;
 	}
 }

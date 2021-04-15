@@ -27,9 +27,7 @@ export class Houses extends AbstractScene {
 	}
 
 	protected init(): void {
-		const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, new BABYLON.Vector3(0, 2, -3), this.scene);
-		camera.attachControl(this.canvas, true);
-		const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), this.scene);
+		this.addCamera(0, 2, -3);
 
 		BABYLON.SceneLoader.ImportMeshAsync("", "https://assets.babylonjs.com/meshes/", "both_houses_scene.babylon").then((result) => {
 			const house1 = result.meshes[1];
