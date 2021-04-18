@@ -33,20 +33,26 @@ export class Village extends AbstractScene {
 	protected init(): void {
 		this.addCamera(0, 1, -2);
 		BABYLON.MeshBuilder.CreateGround("ground", { width : this.worldWidth, height: this.worldHeight }, this.scene);
-		this.createBlock(-2.5, 1, 4, 3);
+		this.createBlock(-2.5, 1, 4, 2);
 		new BABYLON.Sound("crowd", "/crowd.mp3", this.scene,
 		 	null,
 			{autoplay: true, loop: true});
 
 	}
 
-	private createBlock(x: number, z: number, width: number, depth : number): void {
+	private createBlock(x: number, z: number, columns: number, rows : number): void {
 		const xIncrement = 1 + 0.5; // 1 = house width, 0.5 = space between houses
 		const zIncrement = 1 + 0.5; // 1 = house depth, 0.5 = space between houses
-		for (var zOrigin = z; zOrigin < (depth - zIncrement); zOrigin += zIncrement) {
-			for (var xOrigin = x; xOrigin < (width - xIncrement); xOrigin += xIncrement) {
-				this.createHouse(xOrigin, 0, zOrigin);
+
+		var currentX = x;
+		var currentZ = z;
+		for (var row = 0; row < rows; row++) {
+			currentX = x;
+			for (var col = 0; col < columns; col++) {
+				this.createHouse(currentX, 0, currentZ);
+				currentX += xIncrement;
 			}
+			currentZ += zIncrement;
 		}
 	}
 
