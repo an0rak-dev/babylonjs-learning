@@ -32,13 +32,41 @@ export class Village extends AbstractScene {
 
 	protected init(): void {
 		this.addCamera(0, 1, -2);
-		const box = BABYLON.MeshBuilder.CreateBox("box", {}, this.scene);
-		const ground = BABYLON.MeshBuilder.CreateGround("ground", { width : this.worldWidth, height: this.worldHeight }, this.scene);
-		box.position.y = 0.5;
-
-		const crowd = new BABYLON.Sound("crowd", "/crowd.mp3", this.scene,
+		BABYLON.MeshBuilder.CreateGround("ground", { width : this.worldWidth, height: this.worldHeight }, this.scene);
+		this.createBlock(-2.5, 1, 4, 3);
+		new BABYLON.Sound("crowd", "/crowd.mp3", this.scene,
 		 	null,
 			{autoplay: true, loop: true});
 
+	}
+
+	private createBlock(x: number, z: number, width: number, depth : number): void {
+		const xIncrement = 1 + 0.5; // 1 = house width, 0.5 = space between houses
+		const zIncrement = 1 + 0.5; // 1 = house depth, 0.5 = space between houses
+		for (var zOrigin = z; zOrigin < (depth - zIncrement); zOrigin += zIncrement) {
+			for (var xOrigin = x; xOrigin < (width - xIncrement); xOrigin += xIncrement) {
+				this.createHouse(xOrigin, 0, zOrigin);
+			}
+		}
+	}
+
+	private createHouse(x : number, y : number, z : number) : void {
+		const houseCenterY = 0.5
+		const walls = BABYLON.MeshBuilder.CreateBox("box", {}, this.scene);
+		const roofOptions = {
+			diameter: 1.3,
+			height: 1.2,
+			tessellation: 3
+		};
+		const roof = BABYLON.MeshBuilder.CreateCylinder("roof", roofOptions, this.scene);
+		roof.scaling.x = 0.75;
+		roof.rotation.z = Math.PI / 2;
+
+		walls.position.x = x;
+		walls.position.y = y + houseCenterY;
+		walls.position.z = z;
+		roof.position.x = x;
+		roof.position.y = y + houseCenterY + 0.70;
+		roof.position.z = z;
 	}
 }
