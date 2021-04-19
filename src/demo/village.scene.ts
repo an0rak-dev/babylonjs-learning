@@ -33,46 +33,77 @@ export class Village extends AbstractScene {
 	protected init(): void {
 		this.addCamera(0, 1, -2);
 		BABYLON.MeshBuilder.CreateGround("ground", { width : this.worldWidth, height: this.worldHeight }, this.scene);
-		this.createBlock(-2.5, 1, 4, 2);
+		const block = new Block(2, 4, this.scene);
+		block.moveTo(-2.5, 0, 1);
 		new BABYLON.Sound("crowd", "/crowd.mp3", this.scene,
 		 	null,
 			{autoplay: true, loop: true});
+	}
+}
 
+class Block {
+	private readonly houses: House[][];
+	private readonly rows: number;
+	private readonly columns: number;
+
+	constructor(rows: number, columns: number, scene: BABYLON.Scene) {
+		this.houses = new Array();
+		this.rows = rows;
+		this.columns = columns;
+		for (var row = 0; row < this.rows; row++) {
+			const rowHouse = new Array();
+			for (var col = 0; col < this.columns; col++) {
+				rowHouse.push(new House(scene));
+			}
+			this.houses.push(rowHouse);
+		}
 	}
 
-	private createBlock(x: number, z: number, columns: number, rows : number): void {
-		const xIncrement = 1 + 0.5; // 1 = house width, 0.5 = space between houses
-		const zIncrement = 1 + 0.5; // 1 = house depth, 0.5 = space between houses
-
+	public moveTo(x: number, y: number, z: number) : void {
 		var currentX = x;
 		var currentZ = z;
-		for (var row = 0; row < rows; row++) {
+		const xIncrement = House.WIDTH + 0.5;
+		const zIncrement = House.DEPTH + 0.5;
+		for (var row = 0; row < this.rows; row++) {
 			currentX = x;
-			for (var col = 0; col < columns; col++) {
-				this.createHouse(currentX, 0, currentZ);
+			for (var col = 0; col < this.columns; col++) {
+				this.houses[row][col].moveTo(currentX, y, currentZ);
 				currentX += xIncrement;
 			}
 			currentZ += zIncrement;
 		}
 	}
+}
 
-	private createHouse(x : number, y : number, z : number) : void {
-		const houseCenterY = 0.5
-		const walls = BABYLON.MeshBuilder.CreateBox("box", {}, this.scene);
+class House {
+	public static readonly WIDTH = 1;
+	public static readonly DEPTH = 1;
+	private readonly scene : BABYLON.Scene;
+	private readonly walls : BABYLON.Mesh;
+	private readonly roof : BABYLON.Mesh;
+
+	constructor(scene: BABYLON.Scene) {
+		this.scene = scene;
+		this.walls = BABYLON.MeshBuilder.CreateBox("box", {}, this.scene);
 		const roofOptions = {
 			diameter: 1.3,
 			height: 1.2,
 			tessellation: 3
 		};
-		const roof = BABYLON.MeshBuilder.CreateCylinder("roof", roofOptions, this.scene);
-		roof.scaling.x = 0.75;
-		roof.rotation.z = Math.PI / 2;
+		this.roof = BABYLON.MeshBuilder.CreateCylinder("roof", roofOptions, this.scene);
+		this.roof.scaling.x = 0.75;
+		this.roof.rotation.z = Math.PI / 2;
+		this.moveTo(0, 0, 0);
+	}
 
-		walls.position.x = x;
-		walls.position.y = y + houseCenterY;
-		walls.position.z = z;
-		roof.position.x = x;
-		roof.position.y = y + houseCenterY + 0.70;
-		roof.position.z = z;
+	moveTo(x: number, y: number, z: number) : void {
+		const houseCenterY = 0.5;
+		const roofCenterY = houseCenterY + 0.70;
+		this.walls.position.x = x;
+		this.walls.position.y = y + houseCenterY;
+		this.walls.position.z = z;
+		this.roof.position.x = x;
+		this.roof.position.y = y + roofCenterY;
+		this.roof.position.z = z;
 	}
 }
