@@ -32,7 +32,10 @@ export class Village extends AbstractScene {
 
 	protected init(): void {
 		this.addCamera(0, 1, -2);
-		BABYLON.MeshBuilder.CreateGround("ground", { width : this.worldWidth, height: this.worldHeight }, this.scene);
+		const ground = BABYLON.MeshBuilder.CreateGround("ground", { width : this.worldWidth, height: this.worldHeight }, this.scene);
+		const groundMat = new BABYLON.StandardMaterial("groundMaterial", this.scene);
+		groundMat.diffuseColor = new BABYLON.Color3(0.2941, 0.4784, 0.3254);
+		ground.material = groundMat;
 		const block = new Block(2, 4, this.scene);
 		block.moveTo(-2.5, 0, 1);
 		new BABYLON.Sound("crowd", "/crowd.mp3", this.scene,
