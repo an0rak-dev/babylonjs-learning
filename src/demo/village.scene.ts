@@ -32,7 +32,10 @@ export class Village extends AbstractScene {
 
 	protected init(): void {
 		this.addCamera(0, 1, -2);
-		BABYLON.MeshBuilder.CreateGround("ground", { width : this.worldWidth, height: this.worldHeight }, this.scene);
+		const ground = BABYLON.MeshBuilder.CreateGround("ground", { width : this.worldWidth, height: this.worldHeight }, this.scene);
+		const groundMat = new BABYLON.StandardMaterial("groundMaterial", this.scene);
+		groundMat.diffuseColor = new BABYLON.Color3(0.2941, 0.4784, 0.3254);
+		ground.material = groundMat;
 		const block = new Block(2, 4, this.scene);
 		block.moveTo(-2.5, 0, 1);
 		new BABYLON.Sound("crowd", "/crowd.mp3", this.scene,
@@ -78,21 +81,16 @@ class Block {
 class House {
 	public static readonly WIDTH = 1;
 	public static readonly DEPTH = 1;
+	private static roofTexture : BABYLON.Texture;
+	private static wallTexture : BABYLON.Texture;
 	private readonly scene : BABYLON.Scene;
 	private readonly walls : BABYLON.Mesh;
 	private readonly roof : BABYLON.Mesh;
 
 	constructor(scene: BABYLON.Scene) {
 		this.scene = scene;
-		this.walls = BABYLON.MeshBuilder.CreateBox("box", {}, this.scene);
-		const roofOptions = {
-			diameter: 1.3,
-			height: 1.2,
-			tessellation: 3
-		};
-		this.roof = BABYLON.MeshBuilder.CreateCylinder("roof", roofOptions, this.scene);
-		this.roof.scaling.x = 0.75;
-		this.roof.rotation.z = Math.PI / 2;
+		this.walls = this.createWalls();
+		this.roof = this.createRoof();
 		this.moveTo(0, 0, 0);
 	}
 
@@ -105,5 +103,34 @@ class House {
 		this.roof.position.x = x;
 		this.roof.position.y = y + roofCenterY;
 		this.roof.position.z = z;
+	}
+
+	private createWalls() {
+		if (null == House.wallTexture) {
+			House.wallTexture = new BABYLON.Texture("https://www.babylonjs-playground.com/textures/floor.png", this.scene);
+		}
+		const walls = BABYLON.MeshBuilder.CreateBox("box", {}, this.scene);
+		const wallsMaterial = new BABYLON.StandardMaterial("wallMat", this.scene);
+		wallsMaterial.diffuseTexture = House.wallTexture;
+		walls.material = wallsMaterial;
+		return walls;
+	}
+
+	private createRoof() {
+		if (null == House.roofTexture) {
+			House.roofTexture = new BABYLON.Texture("https://assets.babylonjs.com/environments/roof.jpg", this.scene);
+		}
+		const roofOptions = {
+			diameter: 1.3,
+			height: 1.2,
+			tessellation: 3
+		};
+		const roof = BABYLON.MeshBuilder.CreateCylinder("roof", roofOptions, this.scene);
+		const roofMaterial = new BABYLON.StandardMaterial("roofMat", this.scene);
+		roofMaterial.diffuseTexture = House.roofTexture;
+		roof.material = roofMaterial;
+		roof.scaling.x = 0.75;
+		roof.rotation.z = Math.PI / 2;
+		return roof;
 	}
 }
