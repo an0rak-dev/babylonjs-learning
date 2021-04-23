@@ -107,9 +107,15 @@ class House {
 
 	private createWalls() {
 		if (null == House.wallTexture) {
-			House.wallTexture = new BABYLON.Texture("https://www.babylonjs-playground.com/textures/floor.png", this.scene);
+			House.wallTexture = new BABYLON.Texture("https://assets.babylonjs.com/environments/cubehouse.png", this.scene);
 		}
-		const walls = BABYLON.MeshBuilder.CreateBox("box", {}, this.scene);
+		const facesUVMap = [
+			new BABYLON.Vector4(0.0, 0.0, 0.25, 1.0),
+			new BABYLON.Vector4(0.25, 0.0, 0.50, 1.0),
+			new BABYLON.Vector4(0.50, 0.0, 0.75, 1.0),
+			new BABYLON.Vector4(0.75, 0.0, 1.0, 1.0)
+		];
+		const walls = BABYLON.MeshBuilder.CreateBox("box", {faceUV: facesUVMap, wrap: true}, this.scene);
 		const wallsMaterial = new BABYLON.StandardMaterial("wallMat", this.scene);
 		wallsMaterial.diffuseTexture = House.wallTexture;
 		walls.material = wallsMaterial;
