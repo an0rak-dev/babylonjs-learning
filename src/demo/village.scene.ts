@@ -107,7 +107,7 @@ class House {
 
 	private createWalls() {
 		if (null == House.wallTexture) {
-			House.wallTexture = new BABYLON.Texture("https://doc.babylonjs.com/_next/image?url=%2Fimg%2Fgetstarted%2Fcubehouse.png&w=3840&q=75", this.scene);
+			House.wallTexture = new BABYLON.Texture("https://assets.babylonjs.com/environments/cubehouse.png", this.scene);
 		}
 		const facesUVMap = [
 			new BABYLON.Vector4(0.0, 0.0, 0.25, 1.0),
