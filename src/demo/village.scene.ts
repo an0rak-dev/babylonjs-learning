@@ -84,25 +84,26 @@ class House {
 	private static roofTexture : BABYLON.Texture;
 	private static wallTexture : BABYLON.Texture;
 	private readonly scene : BABYLON.Scene;
-	private readonly walls : BABYLON.Mesh;
-	private readonly roof : BABYLON.Mesh;
+	private readonly mesh : BABYLON.Mesh;
 
 	constructor(scene: BABYLON.Scene) {
 		this.scene = scene;
-		this.walls = this.createWalls();
-		this.roof = this.createRoof();
+		const walls = this.createWalls();
+		const roof = this.createRoof();
+		const mergedMeshes = BABYLON.Mesh.MergeMeshes([walls, roof], true, false, undefined, false, true);
+		if (null != mergedMeshes) {
+			this.mesh = mergedMeshes;
+		} else {
+			this.mesh = walls;
+		}
 		this.moveTo(0, 0, 0);
 	}
 
 	moveTo(x: number, y: number, z: number) : void {
 		const houseCenterY = 0.5;
-		const roofCenterY = houseCenterY + 0.70;
-		this.walls.position.x = x;
-		this.walls.position.y = y + houseCenterY;
-		this.walls.position.z = z;
-		this.roof.position.x = x;
-		this.roof.position.y = y + roofCenterY;
-		this.roof.position.z = z;
+		this.mesh.position.x = x;
+		this.mesh.position.y = y + houseCenterY;
+		this.mesh.position.z = z;
 	}
 
 	private createWalls() {
@@ -137,6 +138,7 @@ class House {
 		roof.material = roofMaterial;
 		roof.scaling.x = 0.75;
 		roof.rotation.z = Math.PI / 2;
+		roof.position.y = 0.70;
 		return roof;
 	}
 }
